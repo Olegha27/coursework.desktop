@@ -1,0 +1,1 @@
+Controller for restaurant-related operations in the desktop application

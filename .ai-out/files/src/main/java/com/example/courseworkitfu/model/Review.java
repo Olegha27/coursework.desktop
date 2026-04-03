@@ -1,0 +1,1 @@
+Entity class for reviews of restaurants or drivers

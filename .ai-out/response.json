@@ -1,0 +1,60 @@
+{
+  "summary": "Project Overview",
+  "files": [
+    {
+      "path": "src/main/java/com/example/courseworkitfu/HungryApplication.java",
+      "action": "create",
+      "content": "JavaFX application entry point"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/fxControllers/MainForm.java",
+      "action": "create",
+      "content": "Main form controller for the desktop application"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/fxControllers/LoginForm.java",
+      "action": "update",
+      "content": "Login form controller with validation and registration information"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/fxControllers/RegisterForm.java",
+      "action": "create",
+      "content": "Register form controller for user registration"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/fxControllers/RestaurantForm.java",
+      "action": "update",
+      "content": "Controller for restaurant-related operations in the desktop application"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/fxControllers/UserProfileForm.java",
+      "action": "create",
+      "content": "User profile form controller with user data display and editing capabilities"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/model/Cuisine.java",
+      "action": "update",
+      "content": "Enum for cuisine types"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/model/Message.java",
+      "action": "update",
+      "content": "Entity class for messages in food orders"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/model/Client.java",
+      "action": "update",
+      "content": "User subclass for clients with additional attributes and methods"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/model/Review.java",
+      "action": "create",
+      "content": "Entity class for reviews of restaurants or drivers"
+    },
+    {
+      "path": "src/main/java/com/example/courseworkitfu/model/RestaurantCardRow.java",
+      "action": "create",
+      "content": "JavaFX model for restaurant card rows in the UI"
+    }
+  ]
+}

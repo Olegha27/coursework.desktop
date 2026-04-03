@@ -1,0 +1,1 @@
+Register restaurant form controller for the desktop app

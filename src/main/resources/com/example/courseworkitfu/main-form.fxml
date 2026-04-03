@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefWidth="1200.0" prefHeight="700.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.courseworkitfu.fxControllers.MainForm">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <padding>
+                <Insets top="12.0" right="16.0" bottom="12.0" left="16.0"/>
+            </padding>
+            <children>
+                <Label fx:id="titleLabel"
+                       text="Hungry!"
+                       style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Logout" onAction="#logout"/>
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+
+            <tabs>
+
+                <Tab fx:id="restaurantsTab" text="Restaurants" onSelectionChanged="#loadData">
+                    <content>
+                        <HBox spacing="14.0">
+                            <padding>
+                                <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+                            </padding>
+                            <children>
+                                <VBox spacing="10.0" prefWidth="320.0">
+                                    <children>
+                                        <Label text="Restaurants"
+                                               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                        <ListView fx:id="restaurantList" VBox.vgrow="ALWAYS"/>
+                                    </children>
+                                </VBox>
+
+                                <VBox spacing="10.0" prefWidth="470.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label fx:id="selectedRestaurantLabel"
+                                               text="Select restaurant"
+                                               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                                            <content>
+                                                <TilePane fx:id="dishTilePane"
+                                                          prefColumns="3"
+                                                          hgap="6.0"
+                                                          vgap="6.0"
+                                                          prefTileWidth="170.0"
+                                                          prefTileHeight="220.0">
+                                                    <padding>
+                                                        <Insets top="6.0" right="6.0" bottom="6.0" left="6.0"/>
+                                                    </padding>
+                                                </TilePane>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+
+                                <VBox spacing="10.0" prefWidth="300.0">
+                                    <children>
+                                        <Label text="Cart"
+                                               style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                        <ListView fx:id="cartList" prefHeight="320.0" VBox.vgrow="ALWAYS"/>
+                                        <Label fx:id="cartTotalLabel"
+                                               text="Total: $0.00"
+                                               style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                        <Label text="Special instructions"/>
+                                        <TextArea fx:id="specialInstructionsArea"
+                                                  prefRowCount="3"
+                                                  promptText="Special instructions"/>
+                                        <HBox spacing="10.0">
+                                            <children>
+                                                <Button text="Place Order"
+                                                        prefWidth="140.0"
+                                                        onAction="#placeOrder"/>
+                                                <Button text="Clear Cart"
+                                                        prefWidth="140.0"
+                                                        onAction="#clearCart"/>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </content>
+                </Tab>
+
+                <Tab fx:id="userTab" text="User Management" onSelectionChanged="#loadData">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+                            </padding>
+                            <children>
+                                <Label text="User Management" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <TextField fx:id="userSearchField"
+                                                   promptText="Search by username, email, phone, role..."
+                                                   prefWidth="320.0"/>
+                                        <Button text="Search" onAction="#searchUsers" prefWidth="100.0"/>
+                                        <Button text="Reset" onAction="#resetUserSearch" prefWidth="100.0"/>
+                                    </children>
+                                </HBox>
+                                <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="idColumn" text="ID" prefWidth="55.0"/>
+                                        <TableColumn fx:id="usernameColumn" text="Username" prefWidth="120.0"/>
+                                        <TableColumn fx:id="emailColumn" text="Email" prefWidth="180.0"/>
+                                        <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="120.0"/>
+                                        <TableColumn fx:id="dateCreatedColumn" text="Date Created" prefWidth="170.0"/>
+                                        <TableColumn fx:id="roleColumn" text="Role" prefWidth="90.0"/>
+                                        <TableColumn fx:id="activeColumn" text="Active" prefWidth="70.0"/>
+                                    </columns>
+                                </TableView>
+                                <Label text="Users list for quick selection:"/>
+                                <HBox spacing="12.0">
+                                    <children>
+                                        <ListView fx:id="userList" prefWidth="280.0" prefHeight="100.0"/>
+                                        <VBox spacing="10.0">
+                                            <children>
+                                                <Button text="Create new User" onAction="#loadRegForm" prefWidth="150.0"/>
+                                                <Button text="Delete User" onAction="#deleteUser" prefWidth="150.0"/>
+                                                <Button text="Refresh" onAction="#refreshUsers" prefWidth="150.0"/>
+                                            </children>
+                                        </VBox>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="Double click a user in the list or table to open edit form."
+                                               wrapText="true"
+                                               maxWidth="260.0"/>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <Tab fx:id="ordersTab" text="Order Management" onSelectionChanged="#loadData">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+                            </padding>
+
+                            <children>
+                                <Label text="Order Management" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <TextField fx:id="orderSearchField"
+                                                   promptText="Search by order id, status, buyer, restaurant, driver..."
+                                                   prefWidth="390.0"/>
+                                        <Button text="Search Orders" onAction="#searchOrders" prefWidth="130.0"/>
+                                        <Button text="Reset" onAction="#resetOrderSearch" prefWidth="100.0"/>
+                                    </children>
+                                </HBox>
+
+                                <TableView fx:id="orderTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="orderIdColumn" text="ID" prefWidth="60.0"/>
+                                        <TableColumn fx:id="buyerColumn" text="Client" prefWidth="180.0"/>
+                                        <TableColumn fx:id="restaurantColumn" text="Restaurant" prefWidth="220.0"/>
+                                        <TableColumn fx:id="driverColumn" text="Driver" prefWidth="180.0"/>
+                                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="220.0"/>
+                                        <TableColumn fx:id="priceColumn" text="Total Price" prefWidth="160.0"/>
+                                    </columns>
+                                </TableView>
+
+                                <FlowPane hgap="10.0" vgap="10.0">
+                                    <children>
+                                        <Button fx:id="refreshOrdersButton" text="Refresh Orders" onAction="#refreshOrders" prefWidth="140.0"/>
+                                        <Button fx:id="takeOrderButton" text="Take Order" onAction="#takeOrder" prefWidth="140.0"/>
+                                        <Button fx:id="completeOrderButton" text="Complete Order" onAction="#completeOrder" prefWidth="160.0"/>
+                                        <Button fx:id="confirmOrderButton" text="Confirm" onAction="#confirmOrder" prefWidth="110.0"/>
+                                        <Button fx:id="prepareOrderButton" text="Preparing" onAction="#prepareOrder" prefWidth="130.0"/>
+                                        <Button fx:id="readyForPickupButton" text="Ready for Pickup" onAction="#readyForPickupOrder" prefWidth="160.0"/>
+                                        <Button fx:id="cancelOrderButton" text="Cancel" onAction="#cancelOrder" prefWidth="120.0"/>
+                                    </children>
+                                </FlowPane>
+
+                                <Separator/>
+
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Order Messages"
+                                               style="-fx-font-size: 15px; -fx-font-weight: bold;"/>
+                                        <Label text="Select an order above to see its chat."
+                                               wrapText="true"/>
+                                        <ListView fx:id="orderMessagesList" prefHeight="180.0"/>
+                                        <TextArea fx:id="newMessageArea"
+                                                  promptText="Write message..."
+                                                  prefRowCount="3"/>
+                                        <Button fx:id="sendMessageButton"
+                                                text="Send Message"
+                                                onAction="#sendMessage"
+                                                prefWidth="140.0"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <Tab fx:id="dishTab" text="Dish Management" onSelectionChanged="#loadData">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+                            </padding>
+                            <children>
+                                <Label text="Dish Management" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                <TableView fx:id="dishTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="dishIdColumn" text="ID" prefWidth="55.0"/>
+                                        <TableColumn fx:id="dishCaloriesColumn" text="Calories" prefWidth="80.0"/>
+                                        <TableColumn fx:id="dishCategoryColumn" text="Category" prefWidth="100.0"/>
+                                        <TableColumn fx:id="dishDescriptionColumn" text="Description" prefWidth="170.0"/>
+                                        <TableColumn fx:id="dishImageUrlColumn" text="Image URL" prefWidth="120.0"/>
+                                        <TableColumn fx:id="dishAvailableColumn" text="Available" prefWidth="80.0"/>
+                                        <TableColumn fx:id="dishPreparationColumn" text="Prep Min" prefWidth="80.0"/>
+                                        <TableColumn fx:id="dishPriceColumn" text="Price" prefWidth="80.0"/>
+                                        <TableColumn fx:id="dishTitleColumn" text="Title" prefWidth="120.0"/>
+                                        <TableColumn fx:id="dishWeightColumn" text="Weight" prefWidth="80.0"/>
+                                        <TableColumn fx:id="dishRestaurantColumn" text="Restaurant ID" prefWidth="100.0"/>
+                                    </columns>
+                                </TableView>
+                                <FlowPane hgap="10.0" vgap="10.0">
+                                    <children>
+                                        <Button text="Add Dish" onAction="#createDish" prefWidth="130.0"/>
+                                        <Button text="Delete Dish" onAction="#deleteDish" prefWidth="130.0"/>
+                                        <Button text="Refresh" onAction="#refreshDishes" prefWidth="130.0"/>
+                                    </children>
+                                </FlowPane>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <Tab fx:id="statisticsTab" text="Statistics" onSelectionChanged="#loadData">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+                            </padding>
+                            <children>
+                                <Label text="Statistics" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                <Region VBox.vgrow="ALWAYS"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <Tab fx:id="reviewsTab" text="Reviews" onSelectionChanged="#loadData">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+                            </padding>
+                            <children>
+                                <Label text="Reviews" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                                <HBox spacing="10.0">
+                                    <children>
+                                        <TextField fx:id="reviewSearchField"
+                                                   promptText="Search by reviewer, restaurant, driver, client, text..."
+                                                   prefWidth="400.0"/>
+                                        <Button text="Search" onAction="#searchReviews" prefWidth="100.0"/>
+                                        <Button text="Reset" onAction="#resetReviewSearch" prefWidth="100.0"/>
+                                    </children>
+                                </HBox>
+
+                                <HBox spacing="20.0">
+                                    <children>
+                                        <Label fx:id="averageRatingLabel"
+                                               text="Average Rating: N/A"
+                                               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;"/>
+                                        <Label fx:id="reviewsCountLabel"
+                                               text="Total Reviews: 0"
+                                               style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                                    </children>
+                                </HBox>
+
+                                <TableView fx:id="reviewTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="reviewIdColumn" text="ID" prefWidth="50.0"/>
+                                        <TableColumn fx:id="reviewTypeColumn" text="Type" prefWidth="120.0"/>
+                                        <TableColumn fx:id="reviewerNameColumn" text="Reviewer" prefWidth="120.0"/>
+                                        <TableColumn fx:id="restaurantNameColumn" text="Restaurant" prefWidth="150.0"/>
+                                        <TableColumn fx:id="driverNameColumn" text="Driver" prefWidth="120.0"/>
+                                        <TableColumn fx:id="clientNameColumn" text="Client" prefWidth="120.0"/>
+                                        <TableColumn fx:id="reviewRatingColumn" text="Rating" prefWidth="80.0"/>
+                                        <TableColumn fx:id="reviewTitleColumn" text="Title" prefWidth="150.0"/>
+                                        <TableColumn fx:id="reviewTextColumn" text="Review" prefWidth="300.0"/>
+                                        <TableColumn fx:id="reviewDateColumn" text="Date" prefWidth="150.0"/>
+                                    </columns>
+                                </TableView>
+
+                                <FlowPane hgap="10.0" vgap="10.0">
+                                    <children>
+                                        <Button text="Delete Review" onAction="#deleteSelectedReview" prefWidth="140.0"/>
+                                    </children>
+                                </FlowPane>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <Tab fx:id="notificationsTab" text="Notifications" onSelectionChanged="#loadData">
+                    <content>
+                        <VBox spacing="12.0">
+                            <padding>
+                                <Insets top="16.0" right="16.0" bottom="16.0" left="16.0"/>
+                            </padding>
+                            <children>
+                                <Label text="Notifications" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                <Label text="Double click a notification with #orderId to open it in Order Management."
+                                       wrapText="true"/>
+                                <ListView fx:id="notificationList" VBox.vgrow="ALWAYS"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>

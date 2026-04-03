@@ -1,0 +1,1 @@
+Enum for cuisine types

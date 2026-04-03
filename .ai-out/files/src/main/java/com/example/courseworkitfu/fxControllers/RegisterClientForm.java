@@ -1,0 +1,1 @@
+Register client form controller for the desktop app

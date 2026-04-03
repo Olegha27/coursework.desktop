@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.courseworkitfu.fxControllers.EditUserForm">
+
+    <content>
+        <VBox spacing="14.0" prefWidth="720.0">
+            <padding>
+                <Insets top="18.0" right="18.0" bottom="18.0" left="18.0"/>
+            </padding>
+
+            <children>
+
+                <Label text="Edit User"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                <GridPane hgap="12.0" vgap="12.0">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="160.0"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <children>
+                        <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="usernameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Password:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <PasswordField fx:id="passwordField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Repeat password:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <PasswordField fx:id="repeatPasswordField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <Label text="Email:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="emailField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                        <Label text="Phone:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <TextField fx:id="phoneField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                    </children>
+                </GridPane>
+
+                <HBox spacing="20.0">
+                    <children>
+                        <RadioButton fx:id="clientRadio" text="Client" onAction="#radioChanged"/>
+                        <RadioButton fx:id="driverRadio" text="Driver" onAction="#radioChanged"/>
+                        <RadioButton fx:id="restaurantRadio" text="Restaurant" onAction="#radioChanged"/>
+                    </children>
+                </HBox>
+
+                <!-- CLIENT -->
+                <TitledPane fx:id="clientTitledPane" text="Client Data" expanded="true">
+                    <content>
+                        <GridPane fx:id="clientPane" hgap="12.0" vgap="12.0">
+                            <columnConstraints>
+                                <ColumnConstraints prefWidth="160.0"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <children>
+                                <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <TextField fx:id="clientNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                <Label text="Surname:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <TextField fx:id="clientSurnameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                <Label text="Card No:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                <TextField fx:id="cardNoField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                                <Label text="Address:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                <TextField fx:id="clientAddressField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                                <Label text="Birth date:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                <DatePicker fx:id="clientBirthDatePicker" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                            </children>
+                        </GridPane>
+                    </content>
+                </TitledPane>
+
+                <!-- DRIVER -->
+                <TitledPane fx:id="driverTitledPane" text="Driver Data" expanded="false">
+                    <content>
+                        <GridPane fx:id="driverPane" hgap="12.0" vgap="12.0">
+                            <columnConstraints>
+                                <ColumnConstraints prefWidth="160.0"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <children>
+                                <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <TextField fx:id="driverNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                <Label text="Surname:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <TextField fx:id="driverSurnameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                <Label text="Driver licence:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                <TextField fx:id="driverLicenceField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                                <Label text="Vehicle type:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                <ComboBox fx:id="vehicleTypeCombo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                                <Label text="Birth date:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                <DatePicker fx:id="driverBirthDatePicker" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                                <Label text="Vehicle plate:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                                <TextField fx:id="vehiclePlateField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                            </children>
+                        </GridPane>
+                    </content>
+                </TitledPane>
+
+                <!-- RESTAURANT -->
+                <TitledPane fx:id="restaurantTitledPane" text="Restaurant Data" expanded="false">
+                    <content>
+                        <GridPane fx:id="restaurantPane" hgap="12.0" vgap="12.0">
+                            <columnConstraints>
+                                <ColumnConstraints prefWidth="160.0"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <children>
+                                <Label text="Description:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <TextArea fx:id="restaurantDescField" prefRowCount="3" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                <Label text="Address:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <TextField fx:id="restaurantAddressField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                <Label text="Cuisine type:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                <TextField fx:id="cuisineTypeField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                                <Label text="Opening time:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                <TextField fx:id="openingTimeField" promptText="HH:mm" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                                <Label text="Closing time:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                <TextField fx:id="closingTimeField" promptText="HH:mm" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                            </children>
+                        </GridPane>
+                    </content>
+                </TitledPane>
+
+                <Label fx:id="errorLabel" style="-fx-text-fill: red;"/>
+
+                <HBox spacing="12.0">
+                    <children>
+                        <Button text="Save Changes" onAction="#saveUser" prefWidth="160.0"/>
+                        <Button text="Cancel" onAction="#closeWindow" prefWidth="140.0"/>
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>

@@ -1,0 +1,1 @@
+JavaFX model for restaurant card rows in the UI

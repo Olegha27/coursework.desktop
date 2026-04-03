@@ -1,0 +1,1 @@
+User subclass for clients with additional attributes and methods

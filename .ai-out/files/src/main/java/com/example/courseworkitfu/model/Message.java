@@ -1,0 +1,1 @@
+Entity class for messages in food orders
