@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.courseworkitfu.fxControllers.tabs.reviews.ReviewsTabController"
+      spacing="12.0"
+      style="-fx-background-color: #f7f7f7;">
+
+    <padding>
+        <Insets top="14.0" right="14.0" bottom="14.0" left="14.0"/>
+    </padding>
+
+    <children>
+        <Label text="Reviews" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+        <HBox spacing="8.0">
+            <children>
+                <TextField fx:id="reviewSearchField"
+                           promptText="Search by reviewer, target, title, text or rating"
+                           HBox.hgrow="ALWAYS"/>
+
+                <Button text="Search" onAction="#searchReviews" prefWidth="100.0"/>
+                <Button text="Reset" onAction="#resetReviewSearch" prefWidth="100.0"/>
+                <Button text="Delete" onAction="#deleteSelectedReview" prefWidth="100.0"/>
+                <Button text="Refresh" onAction="#refreshReviews" prefWidth="100.0"/>
+            </children>
+        </HBox>
+
+        <HBox spacing="20.0">
+            <children>
+                <Label fx:id="averageRatingLabel"
+                       text="Average rating: 0.00"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+
+                <Label fx:id="reviewsCountLabel"
+                       text="Reviews: 0"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+            </children>
+        </HBox>
+
+        <TableView fx:id="reviewTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="55.0"/>
+                <TableColumn fx:id="reviewerColumn" text="Reviewer" prefWidth="140.0"/>
+                <TableColumn fx:id="targetColumn" text="Target" prefWidth="170.0"/>
+                <TableColumn fx:id="titleColumn" text="Title" prefWidth="160.0"/>
+                <TableColumn fx:id="ratingColumn" text="Rating" prefWidth="80.0"/>
+                <TableColumn fx:id="textColumn" text="Text" prefWidth="320.0"/>
+                <TableColumn fx:id="reviewDateColumn" text="Review Date" prefWidth="180.0"/>
+            </columns>
+        </TableView>
+    </children>
+</VBox>

@@ -7,7 +7,7 @@
 <ScrollPane fitToWidth="true"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.courseworkitfu.fxControllers.EditUserForm">
+            fx:controller="com.example.courseworkitfu.fxControllers.users.EditUserForm">
 
     <content>
         <VBox spacing="14.0" prefWidth="720.0">

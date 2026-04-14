@@ -1,5 +1,6 @@
-package com.example.courseworkitfu.fxControllers;
+package com.example.courseworkitfu.fxControllers.users;
 
+import com.example.courseworkitfu.HelloApplication;
 import com.example.courseworkitfu.hibernateOperations.CustomOperations;
 import com.example.courseworkitfu.hibernateOperations.JpaUtil;
 import com.example.courseworkitfu.model.Client;
@@ -9,19 +10,26 @@ import com.example.courseworkitfu.model.User;
 import com.example.courseworkitfu.model.VehicleType;
 import com.example.courseworkitfu.utils.PasswordUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalTime;
 
-public class EditUserForm {
+public class CreateUserForm {
 
     private final CustomOperations customOperations =
             new CustomOperations(JpaUtil.getEntityManagerFactory());
 
+    private boolean createMode = true;
     private User editingUser;
 
-    private final ToggleGroup roleGroup = new ToggleGroup();
+    @FXML public Label formTitleLabel;
+    @FXML public Button saveButton;
+    @FXML public Button cancelButton;
 
     @FXML public TextField usernameField;
     @FXML public PasswordField passwordField;
@@ -33,6 +41,10 @@ public class EditUserForm {
     @FXML public RadioButton restaurantRadio;
     @FXML public RadioButton clientRadio;
     @FXML public RadioButton driverRadio;
+
+    @FXML private Pane clientPane;
+    @FXML private Pane driverPane;
+    @FXML private Pane restaurantPane;
 
     @FXML public Label errorLabel;
 
@@ -55,9 +67,7 @@ public class EditUserForm {
     @FXML public TextField openingTimeField;
     @FXML public TextField closingTimeField;
 
-    @FXML private TitledPane clientTitledPane;
-    @FXML private TitledPane driverTitledPane;
-    @FXML private TitledPane restaurantTitledPane;
+    private final ToggleGroup roleGroup = new ToggleGroup();
 
     @FXML
     public void initialize() {
@@ -76,8 +86,51 @@ public class EditUserForm {
         radioChanged();
     }
 
-    public void setUser(User user) {
+    @FXML
+    private void radioChanged() {
+        boolean client = clientRadio != null && clientRadio.isSelected();
+        boolean driver = driverRadio != null && driverRadio.isSelected();
+        boolean rest = restaurantRadio != null && restaurantRadio.isSelected();
+
+        if (clientPane != null) {
+            clientPane.setVisible(client);
+            clientPane.setManaged(client);
+            clientPane.setDisable(!client);
+        }
+        if (driverPane != null) {
+            driverPane.setVisible(driver);
+            driverPane.setManaged(driver);
+            driverPane.setDisable(!driver);
+        }
+        if (restaurantPane != null) {
+            restaurantPane.setVisible(rest);
+            restaurantPane.setManaged(rest);
+            restaurantPane.setDisable(!rest);
+        }
+    }
+
+    @FXML
+    private void createAccount() {
+        try {
+            onRegister();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setData(boolean createMode, User user) {
+        this.createMode = createMode;
         this.editingUser = user;
+
+        if (createMode) {
+            if (formTitleLabel != null) formTitleLabel.setText("Create User");
+            if (saveButton != null) saveButton.setText("Create Account");
+            if (cancelButton != null) cancelButton.setText("Back");
+        } else {
+            if (formTitleLabel != null) formTitleLabel.setText("Edit User");
+            if (saveButton != null) saveButton.setText("Save Changes");
+            if (cancelButton != null) cancelButton.setText("Cancel");
+        }
 
         if (user == null) return;
 
@@ -85,12 +138,8 @@ public class EditUserForm {
         passwordField.setText("");
         repeatPasswordField.setText("");
 
-        if (user.getEmail() != null) {
-            emailField.setText(user.getEmail());
-        }
-        if (user.getPhoneNum() != null) {
-            phoneField.setText(user.getPhoneNum());
-        }
+        if (user.getEmail() != null) emailField.setText(user.getEmail());
+        if (user.getPhoneNum() != null) phoneField.setText(user.getPhoneNum());
 
         if (user instanceof Client client) {
             clientRadio.setSelected(true);
@@ -123,87 +172,81 @@ public class EditUserForm {
             if (restaurant.getOpeningTime() != null) openingTimeField.setText(restaurant.getOpeningTime().toString());
             if (restaurant.getClosingTime() != null) closingTimeField.setText(restaurant.getClosingTime().toString());
         }
-
-        if (clientRadio != null) clientRadio.setDisable(true);
-        if (driverRadio != null) driverRadio.setDisable(true);
-        if (restaurantRadio != null) restaurantRadio.setDisable(true);
     }
 
     @FXML
-    public void radioChanged() {
-        boolean client = clientRadio != null && clientRadio.isSelected();
-        boolean driver = driverRadio != null && driverRadio.isSelected();
-        boolean restaurant = restaurantRadio != null && restaurantRadio.isSelected();
+    public void onRegister() throws IOException {
+        if (errorLabel != null) errorLabel.setText("");
 
-        if (clientTitledPane != null) {
-            clientTitledPane.setVisible(client);
-            clientTitledPane.setManaged(client);
-            clientTitledPane.setExpanded(client);
-        }
+        String u = usernameField.getText();
+        String p1 = passwordField.getText();
+        String p2 = repeatPasswordField.getText();
 
-        if (driverTitledPane != null) {
-            driverTitledPane.setVisible(driver);
-            driverTitledPane.setManaged(driver);
-            driverTitledPane.setExpanded(driver);
-        }
-
-        if (restaurantTitledPane != null) {
-            restaurantTitledPane.setVisible(restaurant);
-            restaurantTitledPane.setManaged(restaurant);
-            restaurantTitledPane.setExpanded(restaurant);
-        }
-    }
-
-    @FXML
-    public void saveUser() {
-        if (errorLabel != null) {
-            errorLabel.setText("");
-        }
-
-        if (editingUser == null) {
-            errorLabel.setText("User not found.");
-            return;
-        }
-
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String repeatPassword = repeatPasswordField.getText();
-
-        if (username == null || username.trim().isEmpty()) {
+        if (u == null || u.trim().isEmpty()) {
             errorLabel.setText("Username required");
             return;
         }
 
-        editingUser.setUsername(username.trim());
-        editingUser.setEmail(emailField.getText());
-        editingUser.setPhoneNum(phoneField.getText());
+        User user;
 
-        boolean wantsToChangePassword =
-                (password != null && !password.isBlank()) ||
-                        (repeatPassword != null && !repeatPassword.isBlank());
-
-        if (wantsToChangePassword) {
-            if (password == null || password.length() < 3) {
+        if (createMode) {
+            if (p1 == null || p1.length() < 3) {
                 errorLabel.setText("Password too short");
                 return;
             }
-
-            if (!password.equals(repeatPassword)) {
+            if (!p1.equals(p2)) {
                 errorLabel.setText("Passwords do not match");
                 return;
             }
 
-            editingUser.setPassword(PasswordUtils.hashPassword(password));
+            if (clientRadio.isSelected()) {
+                user = new Client();
+            } else if (driverRadio.isSelected()) {
+                user = new Driver();
+            } else if (restaurantRadio.isSelected()) {
+                user = new Restaurant();
+            } else {
+                user = new User();
+            }
+        } else {
+            if (editingUser == null) {
+                errorLabel.setText("User for editing not found");
+                return;
+            }
+            user = editingUser;
         }
 
-        if (editingUser instanceof Client client) {
+        user.setUsername(u.trim());
+        user.setEmail(emailField.getText());
+        user.setPhoneNum(phoneField.getText());
+
+        if (createMode) {
+            user.setPassword(PasswordUtils.hashPassword(p1));
+        } else {
+            boolean wantsToChangePassword =
+                    p1 != null && !p1.isBlank() || p2 != null && !p2.isBlank();
+
+            if (wantsToChangePassword) {
+                if (p1 == null || p1.length() < 3) {
+                    errorLabel.setText("Password too short");
+                    return;
+                }
+                if (!p1.equals(p2)) {
+                    errorLabel.setText("Passwords do not match");
+                    return;
+                }
+                user.setPassword(PasswordUtils.hashPassword(p1));
+            }
+        }
+
+        if (user instanceof Client client) {
             client.setName(clientNameField.getText());
             client.setSurname(clientSurnameField.getText());
             client.setCardNo(cardNoField.getText());
             client.setAddress(clientAddressField.getText());
             client.setDateOfBirth(clientBirthDatePicker.getValue());
 
-        } else if (editingUser instanceof Driver driver) {
+        } else if (user instanceof Driver driver) {
             driver.setName(driverNameField.getText());
             driver.setSurname(driverSurnameField.getText());
             driver.setDriverLicence(driverLicenceField.getText());
@@ -214,7 +257,7 @@ public class EditUserForm {
                 driver.setVehicleType(VehicleType.valueOf(vehicleTypeCombo.getValue()));
             }
 
-        } else if (editingUser instanceof Restaurant restaurant) {
+        } else if (user instanceof Restaurant restaurant) {
             restaurant.setDescription(restaurantDescField.getText());
             restaurant.setAddress(restaurantAddressField.getText());
             restaurant.setCuisineType(cuisineTypeField.getText());
@@ -233,17 +276,33 @@ public class EditUserForm {
         }
 
         try {
-            customOperations.update(editingUser);
-            closeWindow();
+            if (createMode) {
+                customOperations.create(user);
+            } else {
+                customOperations.update(user);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             errorLabel.setText("Save failed");
+            return;
         }
+
+        Stage stage = (Stage) usernameField.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
-    public void closeWindow() {
+    public void onBackToLogin() throws IOException {
         Stage stage = (Stage) usernameField.getScene().getWindow();
-        stage.close();
+
+        if (!createMode) {
+            stage.close();
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("login-form.fxml"));
+        stage.setScene(new Scene(loader.load()));
+        stage.setTitle("Hungry!");
+        stage.show();
     }
 }
