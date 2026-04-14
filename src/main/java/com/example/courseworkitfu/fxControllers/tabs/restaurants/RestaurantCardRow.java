@@ -1,8 +1,5 @@
 package com.example.courseworkitfu.fxControllers.tabs.restaurants;
 
-import lombok.Getter;
-
-@Getter
 public class RestaurantCardRow {
     private final int id;
     private final String title;
@@ -12,7 +9,13 @@ public class RestaurantCardRow {
     private final String rating;
     private final String imageUrl;
 
-    public RestaurantCardRow(int id, String title, String description, String address, String cuisineType, String rating, String imageUrl) {
+    public RestaurantCardRow(int id,
+                             String title,
+                             String description,
+                             String address,
+                             String cuisineType,
+                             String rating,
+                             String imageUrl) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -20,6 +23,34 @@ public class RestaurantCardRow {
         this.cuisineType = cuisineType;
         this.rating = rating;
         this.imageUrl = imageUrl;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getCuisineType() {
+        return cuisineType;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     @Override
