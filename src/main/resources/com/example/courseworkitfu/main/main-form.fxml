@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane prefWidth="1200.0" prefHeight="700.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.courseworkitfu.fxControllers.main.MainForm">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <padding>
+                <Insets top="12.0" right="16.0" bottom="12.0" left="16.0"/>
+            </padding>
+            <children>
+                <Label fx:id="titleLabel"
+                       text="Coursework IT Food"
+                       style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="currentUserLabel"
+                       text="Logged in as:"
+                       style="-fx-font-size: 13px;"/>
+
+                <Button text="Logout" onAction="#logout"/>
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+
+                <Tab text="Restaurants" closable="false">
+                    <content>
+                        <fx:include source="../tabs/restaurants/restaurants-tab.fxml"/>
+                    </content>
+                </Tab>
+
+                <Tab text="User Management" closable="false">
+                    <content>
+                        <fx:include source="../tabs/users/users-tab.fxml"/>
+                    </content>
+                </Tab>
+
+                <Tab text="Order Management" closable="false">
+                    <content>
+                        <fx:include source="../tabs/orders/orders-tab.fxml"/>
+                    </content>
+                </Tab>
+
+                <Tab text="Dish Management" closable="false">
+                    <content>
+                        <fx:include source="../tabs/dishes/dishes-tab.fxml"/>
+                    </content>
+                </Tab>
+
+                <Tab text="Statistics" closable="false">
+                    <content>
+                        <BorderPane>
+                            <center>
+                                <Label text="Statistics"
+                                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                            </center>
+                        </BorderPane>
+                    </content>
+                </Tab>
+
+                <Tab text="Reviews" closable="false">
+                    <content>
+                        <fx:include source="../tabs/reviews/reviews-tab.fxml"/>
+                    </content>
+                </Tab>
+
+                <Tab text="Notifications" closable="false">
+                    <content>
+                        <fx:include source="../tabs/notifications/notifications-tab.fxml"/>
+                    </content>
+                </Tab>
+
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>

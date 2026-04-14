@@ -1,4 +1,4 @@
-package com.example.courseworkitfu.fxControllers;
+package com.example.courseworkitfu.fxControllers.dishes;
 
 import com.example.courseworkitfu.HelloApplication;
 import com.example.courseworkitfu.hibernateOperations.CustomOperations;

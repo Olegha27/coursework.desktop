@@ -63,4 +63,5 @@ public class Review {
  ", reviewer=" + (reviewer != null ? reviewer.getUsername() : "null") +
  '}';
  }
+
 }

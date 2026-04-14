@@ -21,4 +21,12 @@ module com.example.courseworkitfu {
     exports com.example.courseworkitfu.hibernateOperations;
     opens com.example.courseworkitfu.hibernateOperations to javafx.fxml;
     opens com.example.courseworkitfu.model to javafx.fxml, org.hibernate.orm.core;
+    exports com.example.courseworkitfu.fxControllers.tabs.users;
+    opens com.example.courseworkitfu.fxControllers.tabs.users to javafx.fxml;
+    exports com.example.courseworkitfu.fxControllers.dishes;
+    opens com.example.courseworkitfu.fxControllers.dishes to javafx.fxml;
+    exports com.example.courseworkitfu.fxControllers.users;
+    opens com.example.courseworkitfu.fxControllers.users to javafx.fxml;
+    exports com.example.courseworkitfu.fxControllers.main;
+    opens com.example.courseworkitfu.fxControllers.main to javafx.fxml;
 }
