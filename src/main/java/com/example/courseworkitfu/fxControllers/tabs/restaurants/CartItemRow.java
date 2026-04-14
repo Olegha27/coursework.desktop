@@ -1,12 +1,9 @@
 package com.example.courseworkitfu.fxControllers.tabs.restaurants;
 
-import lombok.Setter;
-
 public class CartItemRow {
     private final int dishId;
     private final String title;
     private final double price;
-    @Setter
     private int quantity;
 
     public CartItemRow(int dishId, String title, double price, int quantity) {
@@ -30,6 +27,10 @@ public class CartItemRow {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public double getTotal() {

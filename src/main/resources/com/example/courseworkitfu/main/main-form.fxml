@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 
+<?import javafx.scene.layout.AnchorPane?>
 <BorderPane prefWidth="1200.0" prefHeight="700.0"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -41,7 +42,17 @@
 
                 <Tab text="Restaurants" closable="false">
                     <content>
-                        <fx:include source="../tabs/restaurants/restaurants-tab.fxml"/>
+                        <AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+                                    xmlns:fx="http://javafx.com/fxml/1"
+                                    prefHeight="720.0"
+                                    prefWidth="1200.0">
+                            <children>
+                                <Label layoutX="30.0"
+                                       layoutY="30.0"
+                                       text="Restaurants tab temporary disabled"
+                                       style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                            </children>
+                        </AnchorPane>
                     </content>
                 </Tab>
 
