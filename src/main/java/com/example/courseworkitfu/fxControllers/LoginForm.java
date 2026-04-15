@@ -31,18 +31,6 @@ public class LoginForm {
                 return;
             }
 
-            boolean desktopAllowed = user.isAdmin() || user instanceof Restaurant;
-            if (!desktopAllowed) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Access denied");
-                alert.setHeaderText("Desktop access is not allowed");
-                alert.setContentText(
-                        "Customers and drivers must use the web application.\n" +
-                        "Desktop version is available only for administrators and restaurants."
-                );
-                alert.showAndWait();
-                return;
-            }
 
             Session.setCurrentUser(user);
 
@@ -64,13 +52,21 @@ public class LoginForm {
     }
 
     public void loadRegForm() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Registration");
-        alert.setHeaderText("Registration unavailable in desktop app");
-        alert.setContentText(
-                "Customers and drivers must register via the web application.\n" +
-                "Restaurant and administrator accounts should be created by the administrator."
-        );
-        alert.showAndWait();
+        try {
+            Stage stage = (Stage) loginField.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register-form.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setTitle("Hungry! - User Registration");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Load error");
+            alert.setHeaderText("Registration form failed to open");
+            alert.setContentText(e.getClass().getSimpleName() + ": " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 }
