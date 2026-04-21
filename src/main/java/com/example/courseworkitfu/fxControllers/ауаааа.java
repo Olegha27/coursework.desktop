@@ -1,8 +1,14 @@
 package com.example.courseworkitfu.fxControllers;
 
 import com.example.courseworkitfu.HelloApplication;
+import com.example.courseworkitfu.fxControllers.dishes.CreateDishForm;
+import com.example.courseworkitfu.fxControllers.users.CreateUserForm;
+import com.example.courseworkitfu.fxControllers.users.EditUserForm;
 import com.example.courseworkitfu.hibernateOperations.CustomOperations;
 import com.example.courseworkitfu.model.*;
+import com.example.courseworkitfu.services.CartService;
+import com.example.courseworkitfu.services.OrderService;
+import com.example.courseworkitfu.services.RestaurantService;
 import com.example.courseworkitfu.session.Session;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -40,14 +46,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainForm implements Initializable {
+public class ауаааа implements Initializable {
 
     private boolean isDesktopAccessAllowed(User user) {
         return user != null && (user.isAdmin() || user instanceof Restaurant);
@@ -137,8 +141,9 @@ public class MainForm implements Initializable {
     public Label reviewsCountLabel;
 
     private CustomOperations customOperations;
-    private Restaurant selectedRestaurant;
-    private final Map<Integer, CartItemRow> cart = new LinkedHashMap<>();
+    private RestaurantService restaurantService;
+    private CartService cartService;
+    private OrderService orderService;
 
     public ListView<Message> orderMessagesList;
     public TextArea newMessageArea;
@@ -175,6 +180,9 @@ public class MainForm implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         customOperations = new CustomOperations(HelloApplication.emf);
+        restaurantService = new RestaurantService(customOperations);
+        cartService = new CartService();
+        orderService = new OrderService(customOperations);
 
         User currentUser = Session.getCurrentUser();
 
@@ -354,10 +362,10 @@ public class MainForm implements Initializable {
             restaurantList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal == null) return;
 
-                selectedRestaurant = null;
+                restaurantService.setSelectedRestaurant(null);
                 for (Restaurant restaurant : customOperations.getAllRecords(Restaurant.class)) {
                     if (restaurant.getId() == newVal.getId()) {
-                        selectedRestaurant = restaurant;
+                        restaurantService.setSelectedRestaurant(restaurant);
                         break;
                     }
                 }
@@ -394,6 +402,7 @@ public class MainForm implements Initializable {
         if (dishTilePane == null) return;
 
         dishTilePane.getChildren().clear();
+        Restaurant selectedRestaurant = restaurantService.getSelectedRestaurant();
         if (selectedRestaurant == null) return;
 
         for (Dish dish : customOperations.getAllRecords(Dish.class)) {
@@ -480,14 +489,7 @@ public class MainForm implements Initializable {
     }
 
     private void addToCart(DishCardRow dish) {
-        CartItemRow existing = cart.get(dish.getId());
-
-        if (existing == null) {
-            cart.put(dish.getId(), new CartItemRow(dish.getId(), dish.getTitle(), dish.getPrice(), 1));
-        } else {
-            existing.setQuantity(existing.getQuantity() + 1);
-        }
-
+        cartService.addToCart(dish);
         refreshCart();
     }
 
@@ -495,20 +497,15 @@ public class MainForm implements Initializable {
         if (cartList == null) return;
 
         cartList.getItems().clear();
-        cartList.getItems().addAll(cart.values());
-
-        double total = 0.0;
-        for (CartItemRow item : cart.values()) {
-            total += item.getTotal();
-        }
+        cartList.getItems().addAll(cartService.getCartItems().values());
 
         if (cartTotalLabel != null) {
-            cartTotalLabel.setText("Total: $" + String.format("%.2f", total));
+            cartTotalLabel.setText("Total: $" + String.format("%.2f", cartService.getTotal()));
         }
     }
 
     public void clearCart() {
-        cart.clear();
+        cartService.clearCart();
         refreshCart();
     }
 
@@ -517,46 +514,19 @@ public class MainForm implements Initializable {
             return;
         }
 
-        if (selectedRestaurant == null) {
+        if (restaurantService.getSelectedRestaurant() == null) {
             alert("Restaurant", "Select a restaurant first.");
             return;
         }
 
-        if (cart.isEmpty()) {
+        if (cartService.isEmpty()) {
             alert("Cart", "Cart is empty.");
             return;
         }
 
-        FoodOrder order = new FoodOrder();
-        order.setBuyer(client);
-        order.setRestaurant(selectedRestaurant);
-        order.setCreatedAt(LocalDateTime.now());
-        order.setStatus(OrderStatus.PENDING);
-        order.setSpecialInstructions(specialInstructionsArea == null ? "" : specialInstructionsArea.getText());
-
-        double total = 0.0;
-        ArrayList<Dish> items = new ArrayList<>();
-
-        for (CartItemRow item : cart.values()) {
-            for (int i = 0; i < item.getQuantity(); i++) {
-                for (Dish dish : customOperations.getAllRecords(Dish.class)) {
-                    if (dish.getId() == item.getDishId()) {
-                        items.add(dish);
-                        total += dish.getPrice();
-                    }
-                }
-            }
-        }
-
-        order.setItems(items);
-        order.setTotalPrice(total);
-        order.setDeliveryFee(2.99);
-        order.setEstimatedDeliveryMin(30);
-        order.setPaymentMethod("CARD");
-
-        customOperations.create(order);
-
-        createNotification(client, "Your order #" + order.getId() + " was created.");
+        Restaurant selectedRestaurant = restaurantService.getSelectedRestaurant();
+        String instructions = specialInstructionsArea == null ? "" : specialInstructionsArea.getText();
+        FoodOrder order = orderService.createOrder(client, selectedRestaurant, instructions, cartService.getCartItems());
 
         if (selectedRestaurant != null) {
             createNotification(selectedRestaurant,
@@ -1535,10 +1505,7 @@ public class MainForm implements Initializable {
     }
 
     private void createNotification(User user, String message) {
-        if (user == null) return;
-
-        Notification notification = new Notification(message, user);
-        customOperations.create(notification);
+        orderService.createNotification(user, message);
     }
 
     private void applyRoleVisibility() {

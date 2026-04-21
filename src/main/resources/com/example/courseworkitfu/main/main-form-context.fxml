@@ -7,7 +7,7 @@
 <BorderPane prefWidth="1200.0" prefHeight="700.0"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.courseworkitfu.fxControllers.MainForm">
+            fx:controller="com.example.courseworkitfu.fxControllers.ауаааа">
 
    <top>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
