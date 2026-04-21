@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="580.0" prefWidth="560.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.courseworkitfu.fxControllers.RegisterForm">
+
+    <children>
+
+        <!-- User type radio buttons -->
+        <RadioButton fx:id="clientRadio"
+                     layoutX="60.0"
+                     layoutY="15.0"
+                     onAction="#radioChanged"
+                     text="Client">
+            <toggleGroup>
+                <ToggleGroup fx:id="userType"/>
+            </toggleGroup>
+        </RadioButton>
+
+        <RadioButton fx:id="driverRadio"
+                     layoutX="200.0"
+                     layoutY="15.0"
+                     onAction="#radioChanged"
+                     text="Driver"
+                     toggleGroup="$userType"/>
+
+        <RadioButton fx:id="restaurantRadio"
+                     layoutX="340.0"
+                     layoutY="15.0"
+                     onAction="#radioChanged"
+                     text="Restaurant"
+                     toggleGroup="$userType"/>
+
+        <!-- Common User fields -->
+        <Pane fx:id="userPane"
+              layoutX="20.0"
+              layoutY="50.0"
+              prefHeight="195.0"
+              prefWidth="520.0"
+              style="-fx-border-color: lightgray; -fx-border-radius: 5;">
+
+            <children>
+                <Label layoutX="10.0" layoutY="10.0" text="Username"/>
+                <TextField fx:id="usernameField" layoutX="150.0" layoutY="7.0" prefWidth="200.0"
+                           promptText="Enter username"/>
+
+                <Label layoutX="10.0" layoutY="45.0" text="Password"/>
+                <PasswordField fx:id="passwordField" layoutX="150.0" layoutY="42.0" prefWidth="200.0"
+                             promptText="Enter password"/>
+
+                <Label layoutX="10.0" layoutY="80.0" text="Repeat Password"/>
+                <PasswordField fx:id="repeatPasswordField" layoutX="150.0" layoutY="77.0" prefWidth="200.0"
+                             promptText="Repeat password"/>
+
+                <Label layoutX="10.0" layoutY="115.0" text="Email"/>
+                <TextField fx:id="emailField" layoutX="150.0" layoutY="112.0" prefWidth="200.0"
+                           promptText="Enter email"/>
+
+                <Label layoutX="10.0" layoutY="150.0" text="Phone Number"/>
+                <TextField fx:id="phoneField" layoutX="150.0" layoutY="147.0" prefWidth="200.0"
+                           promptText="Enter phone number"/>
+            </children>
+        </Pane>
+
+        <!-- Client -->
+        <Pane fx:id="clientPane"
+              layoutX="20.0"
+              layoutY="265.0"
+              prefHeight="150.0"
+              prefWidth="520.0"
+              style="-fx-border-color: lightgray; -fx-border-radius: 5;">
+
+            <children>
+                <Label layoutX="10.0" layoutY="10.0" text="Name"/>
+                <TextField fx:id="clientNameField" layoutX="150.0" layoutY="7.0" prefWidth="200.0"
+                           promptText="Enter name"/>
+
+                <Label layoutX="10.0" layoutY="45.0" text="Surname"/>
+                <TextField fx:id="clientSurnameField" layoutX="150.0" layoutY="42.0" prefWidth="200.0"
+                           promptText="Enter surname"/>
+
+                <Label layoutX="10.0" layoutY="80.0" text="Address"/>
+                <TextField fx:id="clientAddressField" layoutX="150.0" layoutY="77.0" prefWidth="200.0"
+                           promptText="Enter address"/>
+            </children>
+        </Pane>
+
+        <!-- Driver -->
+        <Pane fx:id="driverPane"
+              layoutX="20.0"
+              layoutY="265.0"
+              prefHeight="235.0"
+              prefWidth="520.0"
+              visible="false"
+              disable="true"
+              style="-fx-border-color: lightgray; -fx-border-radius: 5;">
+
+            <children>
+                <Label layoutX="10.0" layoutY="10.0" text="Name"/>
+                <TextField fx:id="driverNameField" layoutX="150.0" layoutY="7.0" prefWidth="200.0"
+                           promptText="Enter name"/>
+
+                <Label layoutX="10.0" layoutY="45.0" text="Surname"/>
+                <TextField fx:id="driverSurnameField" layoutX="150.0" layoutY="42.0" prefWidth="200.0"
+                           promptText="Enter surname"/>
+
+                <Label layoutX="10.0" layoutY="80.0" text="Driver Licence"/>
+                <TextField fx:id="driverLicenceField" layoutX="150.0" layoutY="77.0" prefWidth="200.0"
+                           promptText="Enter licence number"/>
+
+                <Label layoutX="10.0" layoutY="115.0" text="Vehicle Type"/>
+                <ComboBox fx:id="vehicleTypeCombo" layoutX="150.0" layoutY="112.0" prefWidth="200.0"/>
+
+                <Label layoutX="10.0" layoutY="150.0" text="Plate Number"/>
+                <TextField fx:id="vehiclePlateField" layoutX="150.0" layoutY="147.0" prefWidth="200.0"
+                           promptText="Enter plate number"/>
+            </children>
+        </Pane>
+
+        <!-- Restaurant -->
+        <Pane fx:id="restaurantPane"
+              layoutX="20.0"
+              layoutY="265.0"
+              prefHeight="240.0"
+              prefWidth="520.0"
+              visible="false"
+              disable="true"
+              style="-fx-border-color: lightgray; -fx-border-radius: 5;">
+
+            <children>
+                <Label layoutX="10.0" layoutY="10.0" text="Description"/>
+                <TextArea fx:id="restaurantDescField" layoutX="150.0" layoutY="7.0"
+                          prefHeight="65.0" prefWidth="200.0"
+                          promptText="Enter description"/>
+
+                <Label layoutX="10.0" layoutY="82.0" text="Address"/>
+                <TextField fx:id="restaurantAddressField" layoutX="150.0" layoutY="79.0" prefWidth="200.0"
+                           promptText="Enter address"/>
+
+                <Label layoutX="10.0" layoutY="117.0" text="Cuisine Type"/>
+                <TextField fx:id="cuisineTypeField" layoutX="150.0" layoutY="114.0" prefWidth="200.0"
+                           promptText="Enter cuisine type"/>
+
+                <Label layoutX="10.0" layoutY="152.0" text="Opening Time"/>
+                <TextField fx:id="openingTimeField" layoutX="150.0" layoutY="149.0" prefWidth="200.0"
+                           promptText="HH:MM"/>
+
+                <Label layoutX="10.0" layoutY="187.0" text="Closing Time"/>
+                <TextField fx:id="closingTimeField" layoutX="150.0" layoutY="184.0" prefWidth="200.0"
+                           promptText="HH:MM"/>
+            </children>
+        </Pane>
+
+        <Label fx:id="errorLabel"
+               layoutX="20.0"
+               layoutY="505.0"
+               prefWidth="520.0"
+               wrapText="true"
+               textFill="RED"/>
+
+        <Button layoutX="220.0"
+                layoutY="530.0"
+                text="Register"
+                onAction="#onRegister"/>
+
+        <Button layoutX="360.0"
+                layoutY="530.0"
+                text="Back to Login"
+                onAction="#onBackToLogin"/>
+
+        <Label layoutX="20.0" layoutY="555.0" text="User Registration" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+    </children>
+</AnchorPane>
