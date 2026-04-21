@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 public class MainForm implements Initializable {
 
     private boolean isDesktopAccessAllowed(User user) {
-        return user != null && (user.isAdmin() || user instanceof Restaurant);
+        return user != null;
     }
 
     private Timeline messageRefreshTimeline;
@@ -514,7 +514,10 @@ public class MainForm implements Initializable {
 
     public void placeOrder() {
         if (!(Session.getCurrentUser() instanceof Client client)) {
-            return;
+            if (Session.getCurrentUser().getUsername().equals("guest")) {
+            registerGuestAndCompleteOrder();
+        }
+        return;
         }
 
         if (selectedRestaurant == null) {
@@ -561,6 +564,136 @@ public class MainForm implements Initializable {
         if (selectedRestaurant != null) {
             createNotification(selectedRestaurant,
                     "New order #" + order.getId() + " from " + client.getUsername());
+        }
+
+        clearCart();
+        if (specialInstructionsArea != null) {
+            specialInstructionsArea.clear();
+        }
+
+        loadOrders();
+
+        if (mainTabPane != null && ordersTab != null) {
+            mainTabPane.getSelectionModel().select(ordersTab);
+        }
+
+        alert("Success", "Order created.");
+    }
+
+
+    private void registerGuestAndCompleteOrder() {
+        if (cart.isEmpty()) {
+            alert("Cart", "Cart is empty.");
+            return;
+        }
+
+        // Save cart to session
+        Map<Integer, CartItemRow> savedCart = new LinkedHashMap<>();
+        for (Map.Entry<Integer, CartItemRow> entry : cart.entrySet()) {
+            savedCart.put(entry.getKey(), entry.getValue());
+        }
+        Session.setPendingCart(savedCart);
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Registration Required");
+        alert.setHeaderText("Guest users must register to place orders");
+        alert.setContentText("Please register as a Customer to continue with your order.");
+        alert.showAndWait();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("register-form.fxml"));
+            Parent parent = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(parent));
+            stage.setTitle("Hungry! - Customer Registration");
+            stage.showAndWait();
+
+            // After registration, check if we have a new user
+            if (Session.getCurrentUser() != null && !Session.getCurrentUser().getUsername().equals("guest")) {
+                placeOrder(); // Retry placing order with new user
+            } else {
+                // User cancelled or registration failed
+                Session.clearPendingCart();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            alert("Error", "Registration failed: " + e.getMessage());
+            Session.clearPendingCart();
+        }
+    }
+
+    private void completePendingOrder() {
+        if (!Session.hasPendingCart()) {
+            return;
+        }
+
+        if (!(Session.getCurrentUser() instanceof Client client)) {
+            alert("User", "Registration cancelled or failed.");
+            Session.clearPendingCart();
+            return;
+        }
+
+        // Load the saved cart
+        Map<Integer, CartItemRow> savedCart = Session.getPendingCart();
+        cart.clear();
+        cart.putAll(savedCart);
+        Session.clearPendingCart();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Complete Order");
+        alert.setHeaderText("Registration successful!");
+        alert.setContentText("Continue with your order for " + client.getUsername() + "?");
+        alert.showAndWait();
+
+        // Continue with order creation
+        completeOrderForClient(client);
+    }
+
+    private void completeOrderForClient(Client client) {
+        if (selectedRestaurant == null) {
+            alert("Restaurant", "Select a restaurant first.");
+            return;
+        }
+
+        if (cart.isEmpty()) {
+            alert("Cart", "Cart is empty.");
+            return;
+        }
+
+        FoodOrder order = new FoodOrder();
+        order.setBuyer(client);
+        order.setRestaurant(selectedRestaurant);
+        order.setCreatedAt(LocalDateTime.now());
+        order.setStatus(OrderStatus.PENDING);
+        order.setSpecialInstructions(specialInstructionsArea == null ? "" : specialInstructionsArea.getText());
+
+        double total = 0.0;
+        ArrayList<Dish> items = new ArrayList<>();
+
+        for (CartItemRow item : cart.values()) {
+            for (int i = 0; i < item.getQuantity(); i++) {
+                for (Dish dish : customOperations.getAllRecords(Dish.class)) {
+                    if (dish.getId() == item.getDishId()) {
+                        items.add(dish);
+                        total += dish.getPrice();
+                    }
+                }
+            }
+        }
+
+        order.setItems(items);
+        order.setTotalPrice(total);
+        order.setDeliveryFee(2.99);
+        order.setEstimatedDeliveryMin(30);
+        order.setPaymentMethod("CARD");
+
+        customOperations.create(order);
+
+        createNotification(client, "Your order #" + order.getId() + " was created.");
+
+        if (selectedRestaurant != null) {
+            createNotification(selectedRestaurant,
+                "New order #" + order.getId() + " from " + client.getUsername());
         }
 
         clearCart();
@@ -1557,6 +1690,33 @@ public class MainForm implements Initializable {
         boolean isRestaurant = currentUser instanceof Restaurant;
         boolean isClient = currentUser instanceof Client;
         boolean isDriver = currentUser instanceof Driver;
+
+        // Handle guest users - they should see restaurants and orders tabs only
+        if (currentUser.getUsername().equals("guest")) {
+            // Show restaurants tab for guests
+            if (restaurantsTab != null) {
+                restaurantsTab.setText("Restaurants");
+            }
+            if (ordersTab != null) {
+                ordersTab.setText("My Orders");
+            }
+
+            // Hide admin tabs for guests
+            if (mainTabPane.getTabs().contains(userTab)) {
+                mainTabPane.getTabs().remove(userTab);
+            }
+            if (mainTabPane.getTabs().contains(dishTab)) {
+                mainTabPane.getTabs().remove(dishTab);
+            }
+            if (mainTabPane.getTabs().contains(statisticsTab)) {
+                mainTabPane.getTabs().remove(statisticsTab);
+            }
+            if (mainTabPane.getTabs().contains(notificationsTab)) {
+                mainTabPane.getTabs().remove(notificationsTab);
+            }
+
+            return;
+        }
 
         if (isAdmin) {
             if (ordersTab != null) {

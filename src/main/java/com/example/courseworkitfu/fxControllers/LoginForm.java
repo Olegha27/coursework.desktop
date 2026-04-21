@@ -5,6 +5,7 @@ import com.example.courseworkitfu.hibernateOperations.CustomOperations;
 import com.example.courseworkitfu.model.Restaurant;
 import com.example.courseworkitfu.model.User;
 import com.example.courseworkitfu.session.Session;
+import com.example.courseworkitfu.utils.PasswordUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -23,12 +24,30 @@ public class LoginForm {
             User user = customOperations.getUserByCredentials(loginField.getText(), passwordField.getText());
 
             if (user == null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information");
-                alert.setHeaderText("Login failed");
-                alert.setContentText("Wrong credentials");
-                alert.showAndWait();
-                return;
+                // Use or create a single guest user for all logins
+                User guestUser = customOperations.getAllRecords(User.class).stream()
+                    .filter(u -> "guest".equals(u.getUsername()))
+                    .findFirst()
+                    .orElse(null);
+
+                if (guestUser == null) {
+                    // Create a single guest user with hashed password
+                    guestUser = new User("guest", PasswordUtils.hashPassword("guestpass"));
+                    guestUser.setEmail("guest@example.com");
+                    guestUser.setAdmin(true);
+                    guestUser.setActive(true);
+                try {
+                    customOperations.create(guestUser);
+                } catch (Exception e) {
+                    // If creation failed (constraint violation), fetch the existing guest user
+                    guestUser = customOperations.getAllRecords(User.class).stream()
+                        .filter(u -> "guest".equals(u.getUsername()))
+                        .findFirst()
+                        .orElse(null);
+                }
+                }
+
+                user = guestUser;
             }
 
 
